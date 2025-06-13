@@ -18,6 +18,9 @@ const userSchema = mongoose.Schema({
         enum:["user","moderator","admin"]
     },
     skills:[String],
+    refreshToken:{
+        type:String
+    },
     createdAt:{type:Date,default:Date.now}
      
 },{timestamps:true});

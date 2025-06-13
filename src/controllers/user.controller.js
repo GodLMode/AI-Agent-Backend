@@ -3,7 +3,7 @@ import {ApiError} from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
-
+import { inngest } from "../inngest/client.js";
 const generateAccessAndRefreshToken = async (userId)=>{
     try {
         const user = await User.findById(userId);
@@ -21,7 +21,7 @@ const generateAccessAndRefreshToken = async (userId)=>{
 }
 
 
-export const registerUser =asyncHandler(async(req,res)=>{
+const registerUser =asyncHandler(async(req,res)=>{
     const {email,password,skills=[]} = req.body
     if([email,password].some((field)=> field?.trim()==="")){
     throw new ApiError(400,"All fields are requried");
@@ -32,7 +32,7 @@ export const registerUser =asyncHandler(async(req,res)=>{
     }
     const user = await User.create({email,password,skills})
     const isUserCreated = await User.findById(user._id)
-                                    .select("-password");
+                                    .select("-password -refreshToken");
     
     if(!isUserCreated){
         throw new ApiError(500 , "Something went wrong while registering the user");
@@ -69,7 +69,7 @@ const loginUser = asyncHandler(async(req,res)=>{
     // if both exists then -> is ko login krwa do
     const {accessToken , refreshToken } = await generateAccessAndRefreshToken(user._id);
     
-    const loggedInUser = await User.findById(user._id).select("-password");
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
     
 
     const options = {
