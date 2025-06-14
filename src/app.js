@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { serve } from "inngest/express";
+import {inngest} from "./inngest/client.js";
+import {onUserSignUp} from "./inngest/functions/on-signup.js";
 const app = express();
 
 app.use(cors({
@@ -18,5 +21,5 @@ app.use(cookieParser());
 import userRouter from './routers/user.router.js';
 
 app.use('/api/v1/users',userRouter);
-
+app.use("/api/inngest", serve({ client: inngest, functions:[onUserSignUp]}));
 export {app};

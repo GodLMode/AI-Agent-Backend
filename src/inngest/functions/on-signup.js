@@ -1,7 +1,7 @@
 import { NonRetriableError } from "inngest";
-import User from "../../models/user.model";
-import { inngest } from "../client";
-import { sendMail } from "../../utils/mailer";
+import {User} from "../../models/user.model.js";
+import { inngest } from "../client.js";
+import { sendMail } from "../../utils/mailer.js";
 
 export const onUserSignUp = inngest.createFunction(
     {id : "on-user-signup",retries:2},
@@ -19,8 +19,15 @@ export const onUserSignUp = inngest.createFunction(
             await step.run("send-welcome-email",async()=>{
                 const subject = 'Welcome to the app'
                 const message = `Hi, \n\n Thanks for signing up. We're glad to have you onboard!`
-                await sendMail(user.email,subject,message)
-            })
+                try {
+                    await sendMail(user.email,subject,message)
+                    console.log("Email send successfully");
+                    
+                } catch (error) {
+                    console.error("Error in sendMail for", user.email, err);
+                    throw err;
+                }
+            });
 
             return {success:true}
         } catch (error) {

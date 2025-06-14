@@ -7,13 +7,13 @@ export const sendMail = async(to , subject, text)=>{
             port:process.env.MAILTRAP_SMTP_PORT,
             secure:false,
             auth:{
-                user:MAILTRAP_SMTP_USER,
-                pass:MAILTRAP_SMTP_PASS
+                user:process.env.MAILTRAP_SMTP_USER,
+                pass:process.env.MAILTRAP_SMTP_PASS,
             },
         });
 
         const info = await transporter.sendMail({
-            from: "Inngest TMS",
+            from: '"Inngest TMS" alwaysanewbie01@gmail.com',
             to,
             subject,
             text 
