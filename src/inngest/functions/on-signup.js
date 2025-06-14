@@ -2,6 +2,7 @@ import { NonRetriableError } from "inngest";
 import {User} from "../../models/user.model.js";
 import { inngest } from "../client.js";
 import { sendMail } from "../../utils/mailer.js";
+import {ApiError} from "../../utils/ApiError.js";
 
 export const onUserSignUp = inngest.createFunction(
     {id : "on-user-signup",retries:2},
