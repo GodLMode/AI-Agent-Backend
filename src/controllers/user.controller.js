@@ -66,7 +66,6 @@ const loginUser = asyncHandler(async(req,res)=>{
     if(!isCorrectUSer){
         throw new ApiError(402,"Please enter correct Password");
     }
-    // if both exists then -> is ko login krwa do
     const {accessToken , refreshToken } = await generateAccessAndRefreshToken(user._id);
     
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
